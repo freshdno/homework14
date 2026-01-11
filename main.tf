@@ -46,7 +46,7 @@ resource "yandex_compute_instance" "vm-1" {
   }
 
   metadata = {
-    ssh-keys = "ubuntu:${file("~/.ssh/ssh-key-1762949632725.pub")}"
+    user-data = "${file("/home/serega/homework14/meta.txt")}"
   }
 }
 
@@ -68,7 +68,7 @@ resource "yandex_compute_instance" "vm-2" {
   }
 
   metadata = {
-    ssh-keys = "ubuntu:${file("~/.ssh/ssh-key-1762949632725.pub")}"
+    user-data = "${file("/home/serega/homework14/meta.txt")}"
   }
 }
 
