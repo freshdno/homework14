@@ -16,7 +16,7 @@ resource "yandex_compute_disk" "boot-disk-1" {
   type     = "network-hdd"
   zone     = "ru-central1-a"
   size     = "20"
-  image_id = "fd87va5cc00gaq2f5qfb"
+  image_id = "fd861t36p9dqjfrqm0g4"
 }
 
 resource "yandex_compute_disk" "boot-disk-2" {
@@ -24,7 +24,7 @@ resource "yandex_compute_disk" "boot-disk-2" {
   type     = "network-hdd"
   zone     = "ru-central1-a"
   size     = "20"
-  image_id = "fd87va5cc00gaq2f5qfb"
+  image_id = "fd861t36p9dqjfrqm0g4"
 }
 
 resource "yandex_compute_instance" "vm-1" {
