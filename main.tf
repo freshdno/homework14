@@ -11,7 +11,6 @@ provider "yandex" {
   zone = "ru-central1-a"
 }
 
-<настройки провайдера>
 resource "yandex_compute_disk" "boot-disk-1" {
   name     = "boot-disk-1"
   type     = "network-hdd"
