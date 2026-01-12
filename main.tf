@@ -48,13 +48,13 @@ resource "yandex_compute_instance" "vm-1" {
   }
   provisioner "remote-exec" {
     inline = [
-      "apt update -y",
+      "sudo apt update -y",
       "sudo mv /home/ubuntu/app.conf /etc/app.conf",
-      "apt install default-jdk maven git curl -y",
-      "mkdir -p /opt/tomcat && curl -O https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.112/bin/apache-tomcat-9.0.112.tar.gz && tar xzvf apache-tomcat-9.0.112.tar.gz -C /opt/tomcat/ --strip-component=1",
-      "cd cd /opt/tomcat/ && sh -c 'chmod +x /opt/tomcat/bin/*.sh' && mkdir -p /root/homework14 && cd /root/homework14 && git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello.git",
-      "cd /root/homework14/boxfuse-sample-java-war-hello && mvn package",
-      "cp /root/homework14/boxfuse-sample-java-war-hello/target/hello-1.0.war /opt/tomcat/webapps"
+      "sudo apt install default-jdk maven git curl -y",
+      "sudo mkdir -p /opt/tomcat && sudo curl -O https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.112/bin/apache-tomcat-9.0.112.tar.gz && sudo tar xzvf apache-tomcat-9.0.112.tar.gz -C /opt/tomcat/ --strip-component=1",
+      "sudo cd cd /opt/tomcat/ && sh -c 'chmod +x /opt/tomcat/bin/*.sh' && mkdir -p /root/homework14 && cd /root/homework14 && sudo git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello.git",
+      "cd /root/homework14/boxfuse-sample-java-war-hello && sudo mvn package",
+      "sudo cp /root/homework14/boxfuse-sample-java-war-hello/target/hello-1.0.war /opt/tomcat/webapps"
     ]
   }
 }
