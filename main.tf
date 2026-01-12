@@ -54,7 +54,7 @@ resource "yandex_compute_instance" "vm-1" {
       "cd /opt/tomcat/ && sudo sh -c 'chmod +x /opt/tomcat/bin/*.sh' && sudo mkdir -p /opt/tomcat/app && cd /opt/tomcat/app && sudo git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello.git",
       "cd /opt/tomcat/app/boxfuse-sample-java-war-hello && sudo mvn package",
       "sudo cp /opt/tomcat/app/boxfuse-sample-java-war-hello/target/hello-1.0.war /opt/tomcat/webapps",
-      "sudo tee /etc/systemd/system/tomcat.service <<EOF\n[Unit]\nDescription=Apache Tomcat\nAfter=network.target\n\n[Service]\nType=forking\nUser=serega\nGroup=serega\nEnvironment=JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64\nEnvironment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid\nEnvironment=CATALINA_HOME=/opt/tomcat\nExecStart=/opt/tomcat/bin/catalina.sh start\nExecStop=/opt/tomcat/bin/catalina.sh stop\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target\nEOF",
+      "sudo tee /etc/systemd/system/tomcat.service <<EOF\n[Unit]\nDescription=Apache Tomcat\nAfter=network.target\n\n[Service]\nType=forking\nUser=root\nGroup=root\nEnvironment=JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64\nEnvironment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid\nEnvironment=CATALINA_HOME=/opt/tomcat\nExecStart=/opt/tomcat/bin/catalina.sh start\nExecStop=/opt/tomcat/bin/catalina.sh stop\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target\nEOF",
       "sudo systemctl daemon-reload",
       "sudo systemctl enable tomcat",
       "sudo systemctl start tomcat"
