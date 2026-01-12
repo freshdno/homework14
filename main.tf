@@ -54,7 +54,7 @@ resource "yandex_compute_instance" "vm-1" {
       "cd /opt/tomcat/ && sudo sh -c 'chmod +x /opt/tomcat/bin/*.sh' && sudo mkdir -p /opt/tomcat/app && cd /opt/tomcat/app && sudo git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello.git",
       "cd /opt/tomcat/app/boxfuse-sample-java-war-hello && sudo mvn package",
       "sudo cp /opt/tomcat/app/boxfuse-sample-java-war-hello/target/hello-1.0.war /opt/tomcat/webapps",
-      "sudo /opt/tomcat/catalina.sh start"
+      "sudo /opt/tomcat/bin/catalina.sh start"
     ]
   }
 }
