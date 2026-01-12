@@ -19,16 +19,8 @@ resource "yandex_compute_disk" "boot-disk-1" {
   image_id = "fd861t36p9dqjfrqm0g4"
 }
 
-resource "yandex_compute_disk" "boot-disk-2" {
-  name     = "boot-disk-2"
-  type     = "network-hdd"
-  zone     = "ru-central1-a"
-  size     = "20"
-  image_id = "fd861t36p9dqjfrqm0g4"
-}
-
 resource "yandex_compute_instance" "vm-1" {
-  name = "terraform1"
+  name = "builder"
 
   resources {
     cores  = 2
@@ -45,29 +37,25 @@ resource "yandex_compute_instance" "vm-1" {
   }
 
   metadata = {
-    user-data = "${file("/home/serega/homework14/meta.txt")}"
-  }
-}
-
-resource "yandex_compute_instance" "vm-2" {
-  name = "terraform2"
-
-  resources {
-    cores  = 4
-    memory = 4
+    ssh-keys = "serega:${file("~/.ssh/id_rsa.pub")}"
   }
 
-  boot_disk {
-    disk_id = yandex_compute_disk.boot-disk-2.id
+  connection {
+    type        = "ssh"
+    user        = "serega"
+    private_key = file("~/.ssh/id_rsa")
+    host        = yandex_compute_instance.vm-1.network_interface.0.nat_ip_address
   }
-
-  network_interface {
-    subnet_id = yandex_vpc_subnet.subnet-1.id
-    nat       = true
-  }
-
-  metadata = {
-    user-data = "${file("/home/serega/homework14/meta.txt")}"
+  provisioner "remote-exec" {
+    inline = [
+      "apt update -y",
+      "sudo mv /home/ubuntu/app.conf /etc/app.conf",
+      "apt install default-jdk maven git curl -y",
+      "mkdir -p /opt/tomcat && curl -O https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.112/bin/apache-tomcat-9.0.112.tar.gz && tar xzvf apache-tomcat-9.0.112.tar.gz -C /opt/tomcat/ --strip-component=1",
+      "cd cd /opt/tomcat/ && sh -c 'chmod +x /opt/tomcat/bin/*.sh' && mkdir -p /root/homework14 && cd /root/homework14 && git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello.git",
+      "cd /root/homework14/boxfuse-sample-java-war-hello && mvn package",
+      "cp /root/homework14/boxfuse-sample-java-war-hello/target/hello-1.0.war /opt/tomcat/webapps"
+    ]
   }
 }
 
@@ -86,14 +74,7 @@ output "internal_ip_address_vm_1" {
   value = yandex_compute_instance.vm-1.network_interface.0.ip_address
 }
 
-output "internal_ip_address_vm_2" {
-  value = yandex_compute_instance.vm-2.network_interface.0.ip_address
-}
 
 output "external_ip_address_vm_1" {
   value = yandex_compute_instance.vm-1.network_interface.0.nat_ip_address
-}
-
-output "external_ip_address_vm_2" {
-  value = yandex_compute_instance.vm-2.network_interface.0.nat_ip_address
 }
